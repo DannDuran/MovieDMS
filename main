@@ -1,0 +1,202 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+/*
+    Name: Daniel Duran
+    Date: 10/13/2024
+    Course: Software Development I CEN-3024C-15339
+
+    Class: Main Class
+    Class objective: This program simulates a retro movie stores' self check out system.
+                     From the main menu, users will be able to select whether they would like to
+                     check out a movie, return a movie, view all currently held movies,
+                     sell new movies, or exit the program
+
+ */
+
+/*
+    Method name: Main
+    Method purpose: This method's purpose is to display the menu for the user to select each option from.
+                    It contains the switch that calls all the other methods.
+    Method arguments: None
+    Method return value: None
+ */
+
+public class Main {
+    public static void main(String[] args) {
+        int choice;
+        boolean error;
+        ArrayList<Movie> MovieList = new ArrayList<Movie>();
+        Scanner a = new Scanner(System.in);
+
+        Movie pulpFiction = new Movie();
+        Movie scarFace = new Movie();
+        Movie godfather = new Movie();
+
+        MovieList.add(pulpFiction);
+        MovieList.add(scarFace);
+        MovieList.add(godfather);
+
+        pulpFiction.setID(001);
+        pulpFiction.setTitle("Pulp Fiction");
+        pulpFiction.setDirector("Quentin Tarantino");
+        pulpFiction.setYear(1994);
+        pulpFiction.setFormat("DVD");
+        pulpFiction.setGenre("Crime");
+
+        scarFace.setID(002);
+        scarFace.setTitle("Scarface");
+        scarFace.setDirector("Brian De Palma");
+        scarFace.setYear(1983);
+        scarFace.setFormat("VHS");
+        scarFace.setGenre("Crime");
+
+        godfather.setID(003);
+        godfather.setTitle("Godfather");
+        godfather.setDirector("Francis Ford Coppola");
+        godfather.setYear(1972);
+        godfather.setFormat("DVD");
+        godfather.setGenre("Crime");
+
+        do {
+            do {
+                System.out.println("\nWelcome to Daniel's Retro Movie Store!");
+                System.out.println("\nPlease select the operation you wish to perform:\n");
+                System.out.println("\t1. Check Out Movie");
+                System.out.println("\t2. Return Movie");
+                System.out.println("\t3. List Movies");
+                System.out.println("\t4. Sell Movie");
+                System.out.println("\t5. Exit");
+
+                System.out.println("\nEnter Here: ");
+                choice = a.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        error = false;
+                        removeMovie(MovieList);
+                        break;
+                    case 2:
+                        error = false;
+                        readfile s = new readfile();
+                        s.openfile();
+                        s.scanfileReturn(MovieList);
+                        s.closefile();
+                        break;
+                    case 3:
+                        error = false;
+                        listMovies(MovieList);
+                        break;
+                    case 4:
+                        error = false;
+                        System.out.println("\n\tSELL MOVIE\n");
+                        System.out.println("\tPlease create a text file containing your movie's ID, Title, Director, Year of Release, Format, and Genre.");
+                        System.out.println("\tWhen creating the file, please ensure that each parameter is seperated by a comma with no spaces.");
+                        System.out.println("\tFor example...");
+                        System.out.println("\t001,The Greatest Movie Of All Time!!,Daniel Duran,2024,Blu-ray,Comedy");
+                        System.out.println("\tAdditionally, please note that sale price will be determined by your movie's release date and whether it is a VHS or not.\n");
+
+                        readfile r = new readfile();
+                        r.openfile();
+                        r.scanfileSell(MovieList);
+                        r.closefile();
+                        break;
+                    case 5:
+                        error = false;
+                        System.out.println("\n\tEXITING PROGRAM...\n");
+                        break;
+                    default:
+                        error = true;
+                        System.out.println("\tError: You must pick an option from 1-5!");
+                        System.out.println("\tPlease Try Again.");
+                }
+            } while (error);
+        } while(choice != 5);
+    }
+
+/*
+    Method name: removeMovie
+    Method purpose: This method allows users to "check out" movies by removing them from the array list.
+                    Users can select whether they would like to check out a movie by its ID or its title.
+    Method arguments: ArrayList
+    Method return value: None
+ */
+    public static void removeMovie(ArrayList<Movie> MovieList) {
+        Scanner input = new Scanner(System.in);
+        int MovieID, choice;
+        String title;
+        boolean error = false;
+
+        do {
+            listMovies(MovieList);
+            System.out.println("\n\tCHECKING OUT MOVIE FROM DATABASE\n");
+
+            System.out.println("\t1. Check out movie by ID");
+            System.out.println("\t2. Check out movie by title");
+
+            System.out.println("\nEnter here: ");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+
+                    System.out.println("Enter the ID of the movie you wish to check out: ");
+
+                    System.out.println("\nEnter here: ");
+                    MovieID = input.nextInt();
+                    input.nextLine();
+
+                    for (int i = 0; i < MovieList.size(); i++) {
+                        if (MovieID == MovieList.get(i).getID()) {
+                            error = false;
+                            MovieList.remove(i);
+                            System.out.println("Successfully checked out movie with ID of: " + MovieID);
+                        } else {
+                            error = true;
+                        }
+                    }
+                    break;
+
+                case 2:
+
+                    System.out.println("Enter the title of the movie you wish to check out: ");
+
+                    System.out.println("\nEnter here: ");
+                    title = input.nextLine();
+
+                    for (int i = 0; i < MovieList.size(); i++) {
+                        if (title.equals(MovieList.get(i).getTitle())) {
+                            error = false;
+                            MovieList.remove(i);
+                            System.out.println("Successfully checked out movie with title of: " + title);
+                        } else {
+                            error = true;
+                        }
+                    }
+
+                    break;
+            }
+
+
+            if (error) {
+                System.out.println("\tError: Movie does not exist! Please ensure your entry has correct capitalization and no misspellings.");
+                System.out.println("\tPlease Try Again.");
+            }
+        } while(error);
+    }
+
+/*
+    Method name: listMovies
+    Method purpose: This method's purpose is to display all the Movies currently in the MovieList array list.
+    Method arguments: ArrayList
+    Method return value: None
+ */
+    public static void listMovies(ArrayList<Movie> MovieList){
+        System.out.println("\n\tLISTING ALL MOVIES CURRENTLY IN DATABASE\n");
+
+        for(int i = 0; i < MovieList.size(); i++) {
+            System.out.println("\t\t\t\tMOVIE " + (i + 1) + MovieList.get(i).toString() + "\n");
+        }
+    }
+}
