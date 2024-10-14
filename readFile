@@ -1,0 +1,197 @@
+import java.io.*;
+import java.util.*;
+import java.util.Scanner;
+
+/*
+    Name: Daniel Duran
+    Date: 10/13/2024
+    Course: Software Development I CEN-3024C-15339
+
+    Class: Read File
+    Class objective: This class is for allowing users to input the file directory
+                     to a text file that has a Movie's parameters.
+                     This class will locate the file, open it, assign each variable
+                     to a new Movie class object, and then close the file.
+
+ */
+    /*
+        Method name: readFile
+        Method purpose: This method gets the directory of the user's .txt file and opens it so that the scan file
+                        methods can access what is inside.
+        Method arguments: None
+        Method return value: None
+    */
+public class readfile {
+    private Scanner x;
+    Scanner input = new Scanner(System.in);
+    String dir;
+    File file;
+    boolean error = false;
+
+    public void openfile() {
+
+        do {
+            System.out.println("Please type the directory of the file: ");
+            System.out.println("EXAMPLE: C:\\Users\\daniel\\IdeaProjects\\project\\src\\movie1.txt");
+            dir = input.nextLine();
+            file = new File(dir);
+
+            try {
+                x = new Scanner(file);
+                error = false;
+            } catch (FileNotFoundException e) {
+                System.out.println("\n\tFile not found");
+                System.out.println("\tPlease try again\n");
+                error = true;
+            }
+        } while (error);
+    }
+    /*
+        Method name: scanfileSell
+        Method purpose: This method was made to scan a .txt file and assign each token to a variable for
+                        a new movie object. It also calculates a movie's age and determines how much
+                        money should be paid to the seller.
+        Method arguments: ArrayList
+        Method return value: None
+    */
+    public void scanfileSell(ArrayList<Movie> MovieList) {
+        Movie Movie1 = new Movie();
+        boolean error = false;
+        String str;
+        int choice, age, price = 25;
+        Scanner a = new Scanner(System.in);
+        int ID, year;
+        String title, director, format, genre;
+
+        while (x.hasNext()) {
+            str = x.nextLine();
+            String[] arrOfStr = str.split(",");
+
+            ID = Integer.valueOf(arrOfStr[0]);
+            title = arrOfStr[1];
+            director = arrOfStr[2];
+            year = Integer.valueOf(arrOfStr[3]);
+            format = arrOfStr[4];
+            genre = arrOfStr[5];
+
+            Movie1.setID(ID);
+            Movie1.setTitle(title);
+            Movie1.setDirector(director);
+            Movie1.setYear(year);
+            Movie1.setFormat(format);
+            Movie1.setGenre(genre);
+
+            do{
+                System.out.println(Movie1.toString());
+                System.out.println("\nIs this correct?");
+                System.out.println("1. Yes");
+                System.out.println("2. Try again");
+                System.out.println("\nEnter Here: ");
+                choice = a.nextInt();
+                a.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        error = false;
+                        System.out.println("Excellent. Your sale price will be calculated now.");
+
+                        age = 2024 - Movie1.getYear();
+                        if(age >= 44)
+                        {
+                            System.out.println("This movie was released between 1970-1980 so an extra 25 dollars will be added to your sale price.");
+                            price = price + 25;
+                        } else if (age >= 34) {
+                            System.out.println("This movie was released between 1980-1990 so an extra 20 dollars will be added to your sale price.");
+                            price = price + 20;
+                        } else if (age >= 24) {
+                            System.out.println("This movie was released between 1990-2000 so an extra 15 dollars will be added to your sale price.");
+                            price = price + 15;
+                        } if (Movie1.getFormat().equals("VHS")) {
+                            System.out.println("This movie is in VHS format so an extra 20 dollars will be added to your sale price.");
+                            price = price + 20;
+                        }
+
+                        System.out.println("\n\tYOUR PRICE WILL BE...");
+                        System.out.println("$" + price);
+                        System.out.println(Movie1.getTitle() + " will now be added into our database. Thank you for selling with us!");
+                        MovieList.add(Movie1);
+                        break;
+                    case 2:
+                        error = false;
+                        System.out.println("Movie not added");
+                        openfile();
+                        break;
+                    default:
+                        error = true;
+                        System.out.println("Invalid choice! Please select 1 or 2.");
+                }
+            }while(error == true);
+        }
+    }
+
+    /*
+        Method name: scanfileReturn
+        Method purpose: This method was created so that users can add new movies into the database without getting the
+                        price calculation from scanfileSell.
+        Method arguments: ArrayList
+        Method return value: None
+    */
+    public void scanfileReturn(ArrayList<Movie> MovieList) {
+        Movie Movie1 = new Movie();
+        boolean error = false;
+        String str;
+        int choice, age, price = 25;
+        Scanner a = new Scanner(System.in);
+        int ID, year;
+        String title, director, format, genre;
+
+        while (x.hasNext()) {
+            str = x.nextLine();
+            String[] arrOfStr = str.split(",");
+
+            ID = Integer.valueOf(arrOfStr[0]);
+            title = arrOfStr[1];
+            director = arrOfStr[2];
+            year = Integer.valueOf(arrOfStr[3]);
+            format = arrOfStr[4];
+            genre = arrOfStr[5];
+
+            Movie1.setID(ID);
+            Movie1.setTitle(title);
+            Movie1.setDirector(director);
+            Movie1.setYear(year);
+            Movie1.setFormat(format);
+            Movie1.setGenre(genre);
+
+            do{
+                System.out.println(Movie1.toString());
+                System.out.println("\nIs this correct?");
+                System.out.println("1. Yes");
+                System.out.println("2. Try again");
+                System.out.println("\nEnter Here: ");
+                choice = a.nextInt();
+                a.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        error = false;
+                        System.out.println("Excellent. Thank you for returning your movie!");
+                        MovieList.add(Movie1);
+                        break;
+                    case 2:
+                        error = false;
+                        System.out.println("Movie not added");
+                        openfile();
+                        break;
+                    default:
+                        error = true;
+                        System.out.println("Invalid choice! Please select 1 or 2.");
+                }
+            }while(error == true);
+        }
+    }
+
+    public void closefile(){
+        x.close();
+    }
+}
