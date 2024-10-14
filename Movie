@@ -1,0 +1,76 @@
+/*
+    Name: Daniel Duran
+    Date: 10/13/2024
+    Course: Software Development I CEN-3024C-15339
+
+    Class: Movie
+    Class objective: This class defines what parameters a movie object needs.
+                     It also contains a toString method that display all of a movie's attributes.
+ */
+
+public class Movie {
+    private String title;
+    private int year;
+    private String director;
+    private String format;
+    private int ID;
+    private String genre;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    @Override
+    public String toString() {
+        return  "\n\tID: " + ID +
+                "\n\tTitle: " + title +
+                "\n\tDirector: " + director +
+                "\n\tYear of release: " + year +
+                "\n\tFormat: " + format +
+                "\n\tGenre: " + genre;
+    }
+}
