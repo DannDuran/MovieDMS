@@ -33,7 +33,7 @@ public class readfile {
         do {
             System.out.println("Please type the directory of the file: ");
             System.out.println("EXAMPLE: C:\\Users\\daniel\\IdeaProjects\\project\\src\\movie1.txt");
-            dir = input.nextLine();
+            dir = "C:\\Users\\danie\\IdeaProjects\\project\\src\\movie2.txt";
             file = new File(dir);
 
             try {
@@ -54,7 +54,7 @@ public class readfile {
         Method arguments: ArrayList
         Method return value: None
     */
-    public void scanfileSell(ArrayList<Movie> MovieList) {
+    public int scanfileSell(ArrayList<Movie> MovieList) {
         Movie Movie1 = new Movie();
         boolean error = false;
         String str;
@@ -87,8 +87,7 @@ public class readfile {
                 System.out.println("1. Yes");
                 System.out.println("2. Try again");
                 System.out.println("\nEnter Here: ");
-                choice = a.nextInt();
-                a.nextLine();
+                choice = 1;
 
                 switch (choice) {
                     case 1:
@@ -127,6 +126,7 @@ public class readfile {
                 }
             }while(error == true);
         }
+        return price;
     }
 
     /*
@@ -169,8 +169,7 @@ public class readfile {
                 System.out.println("1. Yes");
                 System.out.println("2. Try again");
                 System.out.println("\nEnter Here: ");
-                choice = a.nextInt();
-                a.nextLine();
+                choice = 1;
 
                 switch (choice) {
                     case 1:
