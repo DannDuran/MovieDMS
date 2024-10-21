@@ -66,15 +66,17 @@ public class Main {
                 System.out.println("\t2. Return Movie");
                 System.out.println("\t3. List Movies");
                 System.out.println("\t4. Sell Movie");
-                System.out.println("\t5. Exit");
+                System.out.println("\t5. Update Movie");
+                System.out.println("\t6. Exit");
 
                 System.out.println("\nEnter Here: ");
                 choice = a.nextInt();
+                a.nextLine();
 
                 switch (choice) {
                     case 1:
                         error = false;
-                        removeMovie(MovieList);
+                        Movie.removeMovie(MovieList);
                         break;
                     case 2:
                         error = false;
@@ -85,7 +87,7 @@ public class Main {
                         break;
                     case 3:
                         error = false;
-                        listMovies(MovieList);
+                        Movie.listMovies(MovieList);
                         break;
                     case 4:
                         error = false;
@@ -103,6 +105,10 @@ public class Main {
                         break;
                     case 5:
                         error = false;
+                        Movie.updateMovie(MovieList);
+                        break;
+                    case 6:
+                        error = false;
                         System.out.println("\n\tEXITING PROGRAM...\n");
                         break;
                     default:
@@ -111,92 +117,6 @@ public class Main {
                         System.out.println("\tPlease Try Again.");
                 }
             } while (error);
-        } while(choice != 5);
-    }
-
-/*
-    Method name: removeMovie
-    Method purpose: This method allows users to "check out" movies by removing them from the array list.
-                    Users can select whether they would like to check out a movie by its ID or its title.
-    Method arguments: ArrayList
-    Method return value: None
- */
-    public static void removeMovie(ArrayList<Movie> MovieList) {
-        Scanner input = new Scanner(System.in);
-        int MovieID, choice;
-        String title;
-        boolean error = false;
-
-        do {
-            listMovies(MovieList);
-            System.out.println("\n\tCHECKING OUT MOVIE FROM DATABASE\n");
-
-            System.out.println("\t1. Check out movie by ID");
-            System.out.println("\t2. Check out movie by title");
-
-            System.out.println("\nEnter here: ");
-            choice = input.nextInt();
-            input.nextLine();
-
-            switch (choice) {
-                case 1:
-
-                    System.out.println("Enter the ID of the movie you wish to check out: ");
-
-                    System.out.println("\nEnter here: ");
-                    MovieID = input.nextInt();
-                    input.nextLine();
-
-                    for (int i = 0; i < MovieList.size(); i++) {
-                        if (MovieID == MovieList.get(i).getID()) {
-                            error = false;
-                            MovieList.remove(i);
-                            System.out.println("Successfully checked out movie with ID of: " + MovieID);
-                        } else {
-                            error = true;
-                        }
-                    }
-                    break;
-
-                case 2:
-
-                    System.out.println("Enter the title of the movie you wish to check out: ");
-
-                    System.out.println("\nEnter here: ");
-                    title = input.nextLine();
-
-                    for (int i = 0; i < MovieList.size(); i++) {
-                        if (title.equals(MovieList.get(i).getTitle())) {
-                            error = false;
-                            MovieList.remove(i);
-                            System.out.println("Successfully checked out movie with title of: " + title);
-                        } else {
-                            error = true;
-                        }
-                    }
-
-                    break;
-            }
-
-
-            if (error) {
-                System.out.println("\tError: Movie does not exist! Please ensure your entry has correct capitalization and no misspellings.");
-                System.out.println("\tPlease Try Again.");
-            }
-        } while(error);
-    }
-
-/*
-    Method name: listMovies
-    Method purpose: This method's purpose is to display all the Movies currently in the MovieList array list.
-    Method arguments: ArrayList
-    Method return value: None
- */
-    public static void listMovies(ArrayList<Movie> MovieList){
-        System.out.println("\n\tLISTING ALL MOVIES CURRENTLY IN DATABASE\n");
-
-        for(int i = 0; i < MovieList.size(); i++) {
-            System.out.println("\t\t\t\tMOVIE " + (i + 1) + MovieList.get(i).toString() + "\n");
-        }
+        } while(choice != 6);
     }
 }
