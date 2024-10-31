@@ -1,33 +1,34 @@
-import java.util.Scanner;
+package com.example.javafxproject;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-/*
-    Name: Daniel Duran
-    Date: 10/13/2024
-    Course: Software Development I CEN-3024C-15339
+public class Main extends Application {
 
-    Class: Main Class
-    Class objective: This program simulates a retro movie stores' self check out system.
-                     From the main menu, users will be able to select whether they would like to
-                     check out a movie, return a movie, view all currently held movies,
-                     sell new movies, or exit the program
+    Button goBack1, goBack2, goBack3, goBack4, goBack5, checkOut, returnMovie, list, sell, update, exit;
+    Stage window;
+    Scene mainMenu, checkOutscene, returnScene, listScene, sellScene, updateScene, exitScene;
 
- */
-
-/*
-    Method name: Main
-    Method purpose: This method's purpose is to display the menu for the user to select each option from.
-                    It contains the switch that calls all the other methods.
-    Method arguments: None
-    Method return value: None
- */
-
-public class Main {
     public static void main(String[] args) {
-        int choice;
-        boolean error;
-        ArrayList<Movie> MovieList = new ArrayList<Movie>();
-        Scanner a = new Scanner(System.in);
+        launch();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        window = primaryStage;
+        window.setTitle("Daniel's Movie Store");
+
+        ListView<Movie> MovieListView = new ListView<>();
+        ArrayList<Movie> MovieList = new ArrayList<>();
 
         Movie pulpFiction = new Movie();
         Movie scarFace = new Movie();
@@ -36,6 +37,10 @@ public class Main {
         MovieList.add(pulpFiction);
         MovieList.add(scarFace);
         MovieList.add(godfather);
+
+        MovieListView.getItems().add(pulpFiction);
+        MovieListView.getItems().add(scarFace);
+        MovieListView.getItems().add(godfather);
 
         pulpFiction.setID(001);
         pulpFiction.setTitle("Pulp Fiction");
@@ -58,65 +63,299 @@ public class Main {
         godfather.setFormat("DVD");
         godfather.setGenre("Crime");
 
-        do {
-            do {
-                System.out.println("\nWelcome to Daniel's Retro Movie Store!");
-                System.out.println("\nPlease select the operation you wish to perform:\n");
-                System.out.println("\t1. Check Out Movie");
-                System.out.println("\t2. Return Movie");
-                System.out.println("\t3. List Movies");
-                System.out.println("\t4. Sell Movie");
-                System.out.println("\t5. Update Movie");
-                System.out.println("\t6. Exit");
+        //Main Menu
+        Label label = new Label("\tWelcome to Daniel's Retro Movie Store!" +
+                                   "\n\tPlease select what action you would like to perform!");
 
-                System.out.println("\nEnter Here: ");
-                choice = a.nextInt();
-                a.nextLine();
+        checkOut = new Button("Check Out Movie");
+        checkOut.setOnAction(e -> window.setScene(checkOutscene));
 
-                switch (choice) {
-                    case 1:
-                        error = false;
-                        Movie.removeMovie(MovieList);
-                        break;
-                    case 2:
-                        error = false;
-                        readfile s = new readfile();
-                        s.openfile();
-                        s.scanfileReturn(MovieList);
-                        s.closefile();
-                        break;
-                    case 3:
-                        error = false;
-                        Movie.listMovies(MovieList);
-                        break;
-                    case 4:
-                        error = false;
-                        System.out.println("\n\tSELL MOVIE\n");
-                        System.out.println("\tPlease create a text file containing your movie's ID, Title, Director, Year of Release, Format, and Genre.");
-                        System.out.println("\tWhen creating the file, please ensure that each parameter is seperated by a comma with no spaces.");
-                        System.out.println("\tFor example...");
-                        System.out.println("\t001,The Greatest Movie Of All Time!!,Daniel Duran,2024,Blu-ray,Comedy");
-                        System.out.println("\tAdditionally, please note that sale price will be determined by your movie's release date and whether it is a VHS or not.\n");
+        returnMovie = new Button("Return Movie");
+        returnMovie.setOnAction(e -> window.setScene(returnScene));
 
-                        readfile r = new readfile();
-                        r.openfile();
-                        r.scanfileSell(MovieList);
-                        r.closefile();
-                        break;
-                    case 5:
-                        error = false;
-                        Movie.updateMovie(MovieList);
-                        break;
-                    case 6:
-                        error = false;
-                        System.out.println("\n\tEXITING PROGRAM...\n");
-                        break;
-                    default:
-                        error = true;
-                        System.out.println("\tError: You must pick an option from 1-5!");
-                        System.out.println("\tPlease Try Again.");
+        list = new Button("List Movies");
+        list.setOnAction(e -> window.setScene(listScene));
+
+        sell = new Button("Sell Movie");
+        sell.setOnAction(e -> window.setScene(sellScene));
+
+        update = new Button("Update Movie");
+        update.setOnAction(e -> window.setScene(updateScene));
+
+        exit = new Button("Exit Program");
+        exit.setOnAction(e -> closeProgram());
+
+        //Check Out Screen
+        Label checkOutLabel = new Label("Check Out Screen");
+        Label nameOrIDLabel = new Label("Please select whether you would like to check out a movie by its Name or ID.");
+
+        ChoiceBox<String> nameOrIDBox = new ChoiceBox<>();
+        nameOrIDBox.getItems().addAll("Name", "ID");
+
+        Button nameOrIDButton = new Button("Submit Selection");
+        nameOrIDButton.setOnAction(e -> getNameOrID(nameOrIDBox, MovieList, MovieListView));
+
+        goBack1 = new Button("Go back to main menu");
+        goBack1.setOnAction(e -> window.setScene(mainMenu));
+
+        //Return screen
+        Label returnLabel = new Label("Return Screen");
+        Label typeDirLabel = new Label("Please type the directory of the file containing the new movie.");
+        TextField dir = new TextField();
+
+        Button typeDirButton = new Button("Submit Selection");
+        typeDirButton.setOnAction(e -> {
+            File file = new File(dir.getText());
+            String str, title, director, format, genre;
+
+            int ID, year;
+            Scanner x = null;
+            Movie Movie1 = new Movie();
+
+            try {
+                x = new Scanner(file);
+                System.out.println("Successfully read the file");
+            } catch (FileNotFoundException a) {
+                System.out.println("\n\tFile not found");
+                System.out.println("\tPlease try again\n");
+            }
+
+            while (x.hasNext()) {
+                str = x.nextLine();
+                String[] arrOfStr = str.split(",");
+
+                ID = Integer.valueOf(arrOfStr[0]);
+                title = arrOfStr[1];
+                director = arrOfStr[2];
+                year = Integer.valueOf(arrOfStr[3]);
+                format = arrOfStr[4];
+                genre = arrOfStr[5];
+
+                Movie1.setID(ID);
+                Movie1.setTitle(title);
+                Movie1.setDirector(director);
+                Movie1.setYear(year);
+                Movie1.setFormat(format);
+                Movie1.setGenre(genre);
+            }
+
+            MovieList.add(Movie1);
+            MovieListView.getItems().add(Movie1);
+        });
+
+            goBack2 = new Button("Go back to main menu");
+            goBack2.setOnAction(e -> window.setScene(mainMenu));
+
+            //List Movie Screen
+            Label listLabel = new Label("\tList Movies Screen");
+            goBack3 = new Button("Go back to main menu");
+            goBack3.setOnAction(e -> window.setScene(mainMenu));
+
+            //Sell Movie Screen
+            Label sellLabel = new Label("Sell Movie Screen");
+            Label typeDirLabel2 = new Label("Please type the directory of the file containing the new movie.");
+            TextField dir2 = new TextField();
+
+            Button typeDirButton2 = new Button("Submit Selection");
+            typeDirButton2.setOnAction(e -> {
+                File file = new File(dir2.getText());
+                String str, title, director, format, genre;
+
+                int ID, year, age, price = 25;
+                Scanner a = null;
+                Movie Movie1 = new Movie();
+
+                try {
+                    a = new Scanner(file);
+                    System.out.println("Successfully read the file");
+                } catch (FileNotFoundException x) {
+                    System.out.println("\n\tFile not found");
+                    System.out.println("\tPlease try again\n");
                 }
-            } while (error);
-        } while(choice != 6);
+
+                while (a.hasNext()) {
+                    str = a.nextLine();
+                    String[] arrOfStr = str.split(",");
+
+                    ID = Integer.valueOf(arrOfStr[0]);
+                    title = arrOfStr[1];
+                    director = arrOfStr[2];
+                    year = Integer.valueOf(arrOfStr[3]);
+                    format = arrOfStr[4];
+                    genre = arrOfStr[5];
+
+                    Movie1.setID(ID);
+                    Movie1.setTitle(title);
+                    Movie1.setDirector(director);
+                    Movie1.setYear(year);
+                    Movie1.setFormat(format);
+                    Movie1.setGenre(genre);
+                }
+
+                age = 2024 - Movie1.getYear();
+                if(age >= 44)
+                {
+                    System.out.println("This movie was released between 1970-1980 so an extra 25 dollars will be added to your sale price.");
+                    price = price + 25;
+                } else if (age >= 34) {
+                    System.out.println("This movie was released between 1980-1990 so an extra 20 dollars will be added to your sale price.");
+                    price = price + 20;
+                } else if (age >= 24) {
+                    System.out.println("This movie was released between 1990-2000 so an extra 15 dollars will be added to your sale price.");
+                    price = price + 15;
+                } if (Movie1.getFormat().equals("VHS")) {
+                    System.out.println("This movie is in VHS format so an extra 20 dollars will be added to your sale price.");
+                    price = price + 20;
+                }
+
+                System.out.println("\n\tYOUR PRICE WILL BE...");
+                System.out.println("$" + price);
+
+                MovieList.add(Movie1);
+                MovieListView.getItems().add(Movie1);
+            });
+
+            goBack4 = new Button("Go back to main menu");
+            goBack4.setOnAction(e -> window.setScene(mainMenu));
+
+            // Update Movie Screen
+            Label updateLabel = new Label("Update Movie Screen");
+            goBack5 = new Button("Go back to main menu");
+            goBack5.setOnAction(e -> window.setScene(mainMenu));
+
+
+            // Main Menu Display
+            VBox mainMenuLayout = new VBox(20);
+            mainMenuLayout.getChildren().addAll(label, checkOut, returnMovie, list, sell, update, exit);
+            mainMenu = new Scene(mainMenuLayout, 800, 600);
+
+            // Check Out Display
+            VBox checkOutLayout = new VBox(20);
+            checkOutLayout.getChildren().addAll(checkOutLabel, nameOrIDLabel, nameOrIDBox, nameOrIDButton, goBack1);
+            checkOutscene = new Scene(checkOutLayout, 800, 600);
+
+            // Return Display
+            VBox returnLayout = new VBox(20);
+            returnLayout.getChildren().addAll(returnLabel, typeDirLabel, dir, typeDirButton, goBack2);
+            returnScene = new Scene(returnLayout, 800, 600);
+
+            // List Display
+            VBox listLayout = new VBox(20);
+            listLayout.getChildren().addAll(listLabel, MovieListView, goBack3);
+            listScene = new Scene(listLayout, 800, 600);
+
+            // Sell Display
+            VBox sellLayout = new VBox(20);
+            sellLayout.getChildren().addAll(sellLabel, typeDirLabel2, dir2, typeDirButton2, goBack4);
+            sellScene = new Scene(sellLayout, 800, 600);
+
+            // Update Display
+            VBox updateLayout = new VBox(20);
+            updateLayout.getChildren().addAll(updateLabel, goBack5);
+            updateScene = new Scene(updateLayout, 800, 600);
+
+            window.setScene(mainMenu);
+            window.show();
+        }
+
+    private void getNameOrID(ChoiceBox<String> choiceBox, ArrayList<Movie> MovieList, ListView<Movie> MovieListView){
+        if(choiceBox.getValue() == "ID"){
+            System.out.println("User picked ID");
+
+            Label idInputLabel = new Label("ID Input Screen\n");
+            Label checkedOut = new Label("Item successfully checked out!");
+            Label errorLabel = new Label("Unfortunately, no movie was found with that ID!");
+            Scene idInputScene;
+            TextField IDInput = new TextField();
+            Button goBack = new Button("Go back to name or ID selection");
+            Button goBackHome = new Button("Go back to main menu");
+            Button submitID = new Button("Submit ID");
+            AtomicBoolean error = new AtomicBoolean(false);
+
+            VBox idInputLayout = new VBox(20);
+            idInputLayout.getChildren().addAll(idInputLabel, IDInput, submitID, goBack, goBackHome);
+            idInputScene = new Scene(idInputLayout, 800,600);
+
+            window.setScene(idInputScene);
+
+            submitID.setOnAction(e ->
+                    {
+                        int savedValue = Integer.parseInt(IDInput.getText());
+
+                        for (int i = 0; i < MovieList.size(); i++) {
+                            if (savedValue == MovieList.get(i).getID()) {
+                                MovieList.remove(i);
+                                MovieListView.getItems().remove(i);
+                                error.set(false);
+                                System.out.println(MovieList);
+                            }
+                            else{
+                                error.set(true);
+                                System.out.println(MovieList);
+                            }
+                        }
+
+                        if (error.get() == true){
+                            idInputLayout.getChildren().add(errorLabel);
+                        }
+                        else{
+                            idInputLayout.getChildren().add(checkedOut);
+                        }
+                    });
+
+            goBack.setOnAction(e -> window.setScene(checkOutscene));
+            goBackHome.setOnAction(e -> window.setScene(mainMenu));
+        }
+        else if(choiceBox.getValue() == "Name"){
+            System.out.println("User picked name");
+
+            Label nameInputLabel = new Label("Name Input Screen\n");
+            Label checkedOut = new Label("Item successfully checked out!");
+            Label errorLabel = new Label("Unfortunately, no movie was found with that name! Please check spelling and capitalization!");
+            Scene nameInputScene;
+            TextField NameInput = new TextField();
+            Button goBack = new Button("Go back to name or ID selection");
+            Button goBackHome = new Button("Go back to main menu");
+            Button submitName = new Button("Submit Name");
+            AtomicBoolean error = new AtomicBoolean(false);
+
+            VBox nameInputLayout = new VBox(20);
+            nameInputLayout.getChildren().addAll(nameInputLabel, NameInput, submitName, goBack, goBackHome);
+            nameInputScene = new Scene(nameInputLayout, 800,600);
+
+            window.setScene(nameInputScene);
+
+            submitName.setOnAction(e ->
+            {
+                for (int i = 0; i < MovieList.size(); i++) {
+                    if (NameInput.getText().equals(MovieList.get(i).getTitle())) {
+                        MovieList.remove(i);
+                        MovieListView.getItems().remove(i);
+                        error.set(false);
+                        System.out.println(MovieList);
+                    }
+                    else{
+                        error.set(true);
+                        System.out.println(MovieList);
+                    }
+                }
+
+                if (error.get() == true){
+                    nameInputLayout.getChildren().add(errorLabel);
+                }
+                else{
+                    nameInputLayout.getChildren().add(checkedOut);
+                }
+            });
+
+            goBack.setOnAction(e -> window.setScene(checkOutscene));
+            goBackHome.setOnAction(e -> window.setScene(mainMenu));
+        }
+    }
+
+
+
+    public void closeProgram(){
+        window.close();
     }
 }
