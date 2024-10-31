@@ -1,3 +1,5 @@
+package com.example.javafxproject;
+
 import java.io.*;
 import java.util.*;
 import java.util.Scanner;
@@ -33,7 +35,7 @@ public class readfile {
         do {
             System.out.println("Please type the directory of the file: ");
             System.out.println("EXAMPLE: C:\\Users\\daniel\\IdeaProjects\\project\\src\\movie1.txt");
-            dir = "C:\\Users\\danie\\IdeaProjects\\project\\src\\movie2.txt";
+            dir = input.nextLine();
             file = new File(dir);
 
             try {
@@ -87,7 +89,8 @@ public class readfile {
                 System.out.println("1. Yes");
                 System.out.println("2. Try again");
                 System.out.println("\nEnter Here: ");
-                choice = 1;
+                choice = input.nextInt();
+                input.nextLine();
 
                 switch (choice) {
                     case 1:
@@ -140,7 +143,7 @@ public class readfile {
         Movie Movie1 = new Movie();
         boolean error = false;
         String str;
-        int choice, age, price = 25;
+        int choice;
         Scanner a = new Scanner(System.in);
         int ID, year;
         String title, director, format, genre;
@@ -169,7 +172,8 @@ public class readfile {
                 System.out.println("1. Yes");
                 System.out.println("2. Try again");
                 System.out.println("\nEnter Here: ");
-                choice = 1;
+                choice = input.nextInt();
+                input.nextLine();
 
                 switch (choice) {
                     case 1:
