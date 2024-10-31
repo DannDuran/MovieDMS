@@ -1,3 +1,8 @@
+package com.example.javafxproject;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /*
     Name: Daniel Duran
     Date: 10/13/2024
@@ -7,9 +12,6 @@
     Class objective: This class defines what parameters a movie object needs.
                      It also contains a toString method that display all of a movie's attributes.
  */
-
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Movie {
     private String title;
@@ -98,7 +100,8 @@ public class Movie {
             System.out.println("\t2. Check out movie by title");
 
             System.out.println("\nEnter here: ");
-            choice = 1;
+            choice = input.nextInt();
+            input.nextLine();
 
             switch (choice) {
                 case 1:
@@ -106,7 +109,8 @@ public class Movie {
                     System.out.println("Enter the ID of the movie you wish to check out: ");
 
                     System.out.println("\nEnter here: ");
-                    MovieID = 1;
+                    MovieID = input.nextInt();
+                    input.nextLine();;
 
                     for (int i = 0; i < MovieList.size(); i++) {
                         if (MovieID == MovieList.get(i).getID()) {
@@ -165,7 +169,8 @@ public class Movie {
             System.out.println("\t2. Select movie by title");
 
             System.out.println("\nEnter here: ");
-            choice = 2;
+            choice = input.nextInt();
+            input.nextLine();
 
             switch (choice) {
                 case 1:
@@ -180,80 +185,85 @@ public class Movie {
                         if (MovieID == MovieList.get(i).getID()) {
 
                             do {
-                                error = false;
-                                System.out.println("Select which field you would like to update: ");
-                                System.out.println("1. ID");
-                                System.out.println("2. Title");
-                                System.out.println("3. Director");
-                                System.out.println("4. Year of release");
-                                System.out.println("5. Format");
-                                System.out.println("6. Genre");
-                                System.out.println("\nEnter here: ");
-                                choice = input.nextInt();
-                                input.nextLine();
+                                do {
+                                    error = false;
+                                    System.out.println("Select which field you would like to update: ");
+                                    System.out.println("1. ID");
+                                    System.out.println("2. Title");
+                                    System.out.println("3. Director");
+                                    System.out.println("4. Year of release");
+                                    System.out.println("5. Format");
+                                    System.out.println("6. Genre");
+                                    System.out.println("7. Exit");
+                                    System.out.println("\nEnter here: ");
+                                    choice = input.nextInt();
+                                    input.nextLine();
 
-                                switch (choice) {
-                                    case 1:
-                                        error2 = false;
-                                        System.out.println("Enter the new ID of this movie");
-                                        newID = input.nextInt();
-                                        input.nextLine();
+                                    switch (choice) {
+                                        case 1:
+                                            error2 = false;
+                                            System.out.println("Enter the new ID of this movie");
+                                            newID = input.nextInt();
+                                            input.nextLine();
 
-                                        MovieList.get(i).setID(newID);
+                                            MovieList.get(i).setID(newID);
 
-                                        System.out.println("\n\tNEW ID: " + MovieList.get(i).getID() + "\n");
-                                        break;
-                                    case 2:
-                                        error2 = false;
-                                        System.out.println("Enter the new Title of this movie");
-                                        newTitle = input.nextLine();
+                                            System.out.println("\n\tNEW ID: " + MovieList.get(i).getID() + "\n");
+                                            break;
+                                        case 2:
+                                            error2 = false;
+                                            System.out.println("Enter the new Title of this movie");
+                                            newTitle = input.nextLine();
 
-                                        MovieList.get(i).setTitle(newTitle);
+                                            MovieList.get(i).setTitle(newTitle);
 
-                                        System.out.println("\n\tNEW TITLE: " + MovieList.get(i).getTitle() + "\n");
-                                        break;
-                                    case 3:
-                                        error2 = false;
-                                        System.out.println("Enter the new Director of this movie");
-                                        newDirector = input.nextLine();
+                                            System.out.println("\n\tNEW TITLE: " + MovieList.get(i).getTitle() + "\n");
+                                            break;
+                                        case 3:
+                                            error2 = false;
+                                            System.out.println("Enter the new Director of this movie");
+                                            newDirector = input.nextLine();
 
-                                        MovieList.get(i).setDirector(newDirector);
+                                            MovieList.get(i).setDirector(newDirector);
 
-                                        System.out.println("\n\tNEW DIRECTOR: " + MovieList.get(i).getDirector() + "\n");
-                                        break;
-                                    case 4:
-                                        error2 = false;
-                                        System.out.println("Enter the new Year Of Release of this movie");
-                                        newYear = input.nextInt();
-                                        input.nextLine();
+                                            System.out.println("\n\tNEW DIRECTOR: " + MovieList.get(i).getDirector() + "\n");
+                                            break;
+                                        case 4:
+                                            error2 = false;
+                                            System.out.println("Enter the new Year Of Release of this movie");
+                                            newYear = input.nextInt();
+                                            input.nextLine();
 
-                                        MovieList.get(i).setYear(newYear);
+                                            MovieList.get(i).setYear(newYear);
 
-                                        System.out.println("\n\tNEW YEAR OF RELEASE: " + MovieList.get(i).getYear() + "\n");
-                                        break;
-                                    case 5:
-                                        error2 = false;
-                                        System.out.println("Enter the new Format of this movie");
-                                        newFormat = input.nextLine();
+                                            System.out.println("\n\tNEW YEAR OF RELEASE: " + MovieList.get(i).getYear() + "\n");
+                                            break;
+                                        case 5:
+                                            error2 = false;
+                                            System.out.println("Enter the new Format of this movie");
+                                            newFormat = input.nextLine();
 
-                                        MovieList.get(i).setFormat(newFormat);
+                                            MovieList.get(i).setFormat(newFormat);
 
-                                        System.out.println("\n\tNEW FORMAT: " + MovieList.get(i).getFormat() + "\n");
-                                        break;
-                                    case 6:
-                                        error2 = false;
-                                        System.out.println("Enter the new Genre of this movie");
-                                        newGenre = input.nextLine();
+                                            System.out.println("\n\tNEW FORMAT: " + MovieList.get(i).getFormat() + "\n");
+                                            break;
+                                        case 6:
+                                            error2 = false;
+                                            System.out.println("Enter the new Genre of this movie");
+                                            newGenre = input.nextLine();
 
-                                        MovieList.get(i).setGenre(newGenre);
+                                            MovieList.get(i).setGenre(newGenre);
 
-                                        System.out.println("\n\tNEW GENRE: " + MovieList.get(i).getGenre() + "\n");
-                                        break;
-                                    default:
-                                        error2 = true;
-                                        System.out.println("Error: Invalid entry! Please try again.");
-                                }
-                            } while (error2);
+                                            System.out.println("\n\tNEW GENRE: " + MovieList.get(i).getGenre() + "\n");
+                                            break;
+                                        case 7:
+                                            break;
+                                        default:
+                                            error2 = true;
+                                            System.out.println("Error: Invalid entry! Please try again.");
+                                    }
+                                } while (error2);
+                            } while(choice != 7);
                         } if (MovieID != MovieList.get(i).getID()) {
                             error = true;
                         }
@@ -265,84 +275,90 @@ public class Movie {
                     System.out.println("Enter the title of the movie you wish to update: ");
 
                     System.out.println("\nEnter here: ");
-                    title = "Coco";
+                    title = input.nextLine();
 
                     for (int i = 0; i < MovieList.size(); i++) {
                         if (title.equals(MovieList.get(i).getTitle())) {
                             error = false;
+
                             do {
-                                error = false;
-                                System.out.println("Select which field you would like to update: ");
-                                System.out.println("1. ID");
-                                System.out.println("2. Title");
-                                System.out.println("3. Director");
-                                System.out.println("4. Year of release");
-                                System.out.println("5. Format");
-                                System.out.println("6. Genre");
-                                System.out.println("\nEnter here: ");
-                                choice = 1;
+                                do {
+                                    error = false;
+                                    System.out.println("Select which field you would like to update: ");
+                                    System.out.println("1. ID");
+                                    System.out.println("2. Title");
+                                    System.out.println("3. Director");
+                                    System.out.println("4. Year of release");
+                                    System.out.println("5. Format");
+                                    System.out.println("6. Genre");
+                                    System.out.println("7. Exit");
+                                    System.out.println("\nEnter here: ");
+                                    choice = 1;
 
-                                switch (choice) {
-                                    case 1:
-                                        error2 = false;
-                                        System.out.println("Enter the new ID of this movie");
-                                        newID = 5;
+                                    switch (choice) {
+                                        case 1:
+                                            error2 = false;
+                                            System.out.println("Enter the new ID of this movie");
+                                            newID = 5;
 
-                                        MovieList.get(i).setID(newID);
+                                            MovieList.get(i).setID(newID);
 
-                                        System.out.println("\n\tNEW ID: " + MovieList.get(i).getID() + "\n");
-                                        break;
-                                    case 2:
-                                        error2 = false;
-                                        System.out.println("Enter the new Title of this movie");
-                                        newTitle = input.nextLine();
+                                            System.out.println("\n\tNEW ID: " + MovieList.get(i).getID() + "\n");
+                                            break;
+                                        case 2:
+                                            error2 = false;
+                                            System.out.println("Enter the new Title of this movie");
+                                            newTitle = input.nextLine();
 
-                                        MovieList.get(i).setTitle(newTitle);
+                                            MovieList.get(i).setTitle(newTitle);
 
-                                        System.out.println("\n\tNEW TITLE: " + MovieList.get(i).getTitle() + "\n");
-                                        break;
-                                    case 3:
-                                        error2 = false;
-                                        System.out.println("Enter the new Director of this movie");
-                                        newDirector = input.nextLine();
+                                            System.out.println("\n\tNEW TITLE: " + MovieList.get(i).getTitle() + "\n");
+                                            break;
+                                        case 3:
+                                            error2 = false;
+                                            System.out.println("Enter the new Director of this movie");
+                                            newDirector = input.nextLine();
 
-                                        MovieList.get(i).setDirector(newDirector);
+                                            MovieList.get(i).setDirector(newDirector);
 
-                                        System.out.println("\n\tNEW DIRECTOR: " + MovieList.get(i).getDirector() + "\n");
-                                        break;
-                                    case 4:
-                                        error2 = false;
-                                        System.out.println("Enter the new Year Of Release of this movie");
-                                        newYear = input.nextInt();
-                                        input.nextLine();
+                                            System.out.println("\n\tNEW DIRECTOR: " + MovieList.get(i).getDirector() + "\n");
+                                            break;
+                                        case 4:
+                                            error2 = false;
+                                            System.out.println("Enter the new Year Of Release of this movie");
+                                            newYear = input.nextInt();
+                                            input.nextLine();
 
-                                        MovieList.get(i).setYear(newYear);
+                                            MovieList.get(i).setYear(newYear);
 
-                                        System.out.println("\n\tNEW YEAR OF RELEASE: " + MovieList.get(i).getYear() + "\n");
-                                        break;
-                                    case 5:
-                                        error2 = false;
-                                        System.out.println("Enter the new Format of this movie");
-                                        newFormat = input.nextLine();
+                                            System.out.println("\n\tNEW YEAR OF RELEASE: " + MovieList.get(i).getYear() + "\n");
+                                            break;
+                                        case 5:
+                                            error2 = false;
+                                            System.out.println("Enter the new Format of this movie");
+                                            newFormat = input.nextLine();
 
-                                        MovieList.get(i).setFormat(newFormat);
+                                            MovieList.get(i).setFormat(newFormat);
 
-                                        System.out.println("\n\tNEW FORMAT: " + MovieList.get(i).getFormat() + "\n");
-                                        break;
-                                    case 6:
-                                        error2 = false;
-                                        System.out.println("Enter the new Genre of this movie");
-                                        newGenre = input.nextLine();
+                                            System.out.println("\n\tNEW FORMAT: " + MovieList.get(i).getFormat() + "\n");
+                                            break;
+                                        case 6:
+                                            error2 = false;
+                                            System.out.println("Enter the new Genre of this movie");
+                                            newGenre = input.nextLine();
 
-                                        MovieList.get(i).setGenre(newGenre);
+                                            MovieList.get(i).setGenre(newGenre);
 
-                                        System.out.println("\n\tNEW GENRE: " + MovieList.get(i).getGenre() + "\n");
-                                        break;
-                                    default:
-                                        error2 = true;
-                                        System.out.println("Error: Invalid entry! Please try again.");
-                                }
-                            } while (error2);
+                                            System.out.println("\n\tNEW GENRE: " + MovieList.get(i).getGenre() + "\n");
+                                            break;
+                                        case 7:
+                                            break;
+                                        default:
+                                            error2 = true;
+                                            System.out.println("Error: Invalid entry! Please try again.");
+                                    }
+                                } while (error2);
+                            } while (choice != 7);
                         } else {
                             error = true;
                         }
