@@ -13,6 +13,11 @@ import java.util.Scanner;
                      It also contains a toString method that display all of a movie's attributes.
  */
 
+/**
+ * Movie --- Defines the Movie object and its attributes
+ *           All movies must have a Title, Director, Format, ID, Genre, and release year.
+ * @author  Daniel Duran
+ */
 public class Movie {
     private String title;
     private int year;
@@ -70,6 +75,11 @@ public class Movie {
     }
 
 
+    /**
+     * Lists all movies currently held in the array
+     * @param MovieList An array that holds all currently held movies.
+     * @return No return value.
+     */
     public static void listMovies(ArrayList<Movie> MovieList){
         System.out.println("\n\tLISTING ALL MOVIES CURRENTLY IN DATABASE\n");
 
@@ -86,6 +96,12 @@ public class Movie {
     Method return value: None
     */
 
+    /**
+     * This method allows users to "check out" movies by removing them from the array list.
+     * Users can select whether they would like to check out a movie by its ID or its title.
+     * @param MovieList An array that holds all currently held movies.
+     * @return removed - a boolean that lets the user know if their selected movie was successfully removed or not.
+     */
     public static boolean removeMovie(ArrayList<Movie> MovieList) {
         Scanner input = new Scanner(System.in);
         int MovieID, choice;
@@ -155,6 +171,12 @@ public class Movie {
         return removed;
     }
 
+    /**
+     * This method allows users to update the parameters of any movie currently in the database.
+     * Users will be able to select their movie by its name or ID.
+     * @param MovieList An array that holds all currently held movies.
+     * @return No return value.
+     */
     public static void updateMovie(ArrayList<Movie> MovieList){
         Scanner input = new Scanner(System.in);
         int MovieID, choice, newID, newYear;
@@ -373,6 +395,10 @@ public class Movie {
         } while(error);
     }
 
+    /**
+     * To String method that displays all of a movie's attributes
+     * @return No return value.
+     */
     @Override
     public String toString() {
         return  "\n\tID: " + ID +
