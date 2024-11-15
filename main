@@ -276,7 +276,7 @@ public class Main extends Application {
 
     /**
      * Lets user check out a movie by its name or ID.
-     * Removes a movie from the database once it has been located
+     * Removes a movie from the database once it has been located.
      * @param choiceBox A choice box that allows users to select Name or ID when checking out
      * @param MovieList An array that holds all currently held movies.
      * @param MovieListView A list view that holds all currently held movies.
@@ -304,10 +304,10 @@ public class Main extends Application {
 
             submitID.setOnAction(e ->
                     {
-                        int savedValue = Integer.parseInt(IDInput.getText());
+                        int userInput = Integer.parseInt(IDInput.getText()); // Reads user input and turns it into an int
 
                         for (int i = 0; i < MovieList.size(); i++) {
-                            if (savedValue == MovieList.get(i).getID()) {
+                            if (userInput == MovieList.get(i).getID()) {
                                 MovieList.remove(i);
                                 MovieListView.getItems().remove(i);
                                 error.set(false);
@@ -377,6 +377,10 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Closes the window when Exit is selected on the main menu.
+     * @return No return value.
+     */
     public void closeProgram(){
         window.close();
     }
