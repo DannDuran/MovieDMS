@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Main --- Program to display a menu for a retro movie store.
+ *          Users will be able to check out, return, list, sell, and update movies.
+ * @author  Daniel Duran
+ */
 public class Main extends Application {
 
     Button goBack1, goBack2, goBack3, goBack4, goBack5, checkOut, returnMovie, list, sell, update, exit;
@@ -22,10 +27,21 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * This method displays all the menus the user interacts with.
+     * It allows users to navigate through each function of the program.
+     * @param primaryStage The main stage where all the menus are displayed
+     * @return No return value.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        window.setTitle("Daniel's Movie Store");
+        window.setTitle("Daniel's Retro Movie Store");
+
+        /* Here I created a list array and a list view that are each updated separately based on what movies
+         * the user adds/removes. This is because I wanted to have the movies displayed as a list view for
+         * the List Movie method while keeping the flexibility of an array list.
+         */
 
         ListView<Movie> MovieListView = new ListView<>();
         ArrayList<Movie> MovieList = new ArrayList<>();
@@ -86,20 +102,20 @@ public class Main extends Application {
         exit.setOnAction(e -> closeProgram());
 
         //Check Out Screen
-        Label checkOutLabel = new Label("Check Out Screen");
+        Label checkOutLabel = new Label("\tCHECK OUT MOVIES");
         Label nameOrIDLabel = new Label("Please select whether you would like to check out a movie by its Name or ID.");
 
         ChoiceBox<String> nameOrIDBox = new ChoiceBox<>();
         nameOrIDBox.getItems().addAll("Name", "ID");
 
         Button nameOrIDButton = new Button("Submit Selection");
-        nameOrIDButton.setOnAction(e -> getNameOrID(nameOrIDBox, MovieList, MovieListView));
+        nameOrIDButton.setOnAction(e -> checkOut(nameOrIDBox, MovieList, MovieListView));
 
         goBack1 = new Button("Go back to main menu");
         goBack1.setOnAction(e -> window.setScene(mainMenu));
 
         //Return screen
-        Label returnLabel = new Label("Return Screen");
+        Label returnLabel = new Label("\tRETURN MOVIES");
         Label typeDirLabel = new Label("Please type the directory of the file containing the new movie.");
         TextField dir = new TextField();
 
@@ -110,7 +126,7 @@ public class Main extends Application {
 
             int ID, year;
             Scanner x = null;
-            Movie Movie1 = new Movie();
+            Movie newMovie = new Movie();
 
             try {
                 x = new Scanner(file);
@@ -120,10 +136,11 @@ public class Main extends Application {
                 System.out.println("\tPlease try again\n");
             }
 
-            while (x.hasNext()) {
+            while (x.hasNext()) { // Continues to assign text to the str variable until there is no more text in the textDoc
                 str = x.nextLine();
-                String[] arrOfStr = str.split(",");
+                String[] arrOfStr = str.split(","); // Splits the str variable into pieces seperated by a comma
 
+                // Assigns each piece to a separate variable
                 ID = Integer.valueOf(arrOfStr[0]);
                 title = arrOfStr[1];
                 director = arrOfStr[2];
@@ -131,28 +148,28 @@ public class Main extends Application {
                 format = arrOfStr[4];
                 genre = arrOfStr[5];
 
-                Movie1.setID(ID);
-                Movie1.setTitle(title);
-                Movie1.setDirector(director);
-                Movie1.setYear(year);
-                Movie1.setFormat(format);
-                Movie1.setGenre(genre);
+                newMovie.setID(ID);
+                newMovie.setTitle(title);
+                newMovie.setDirector(director);
+                newMovie.setYear(year);
+                newMovie.setFormat(format);
+                newMovie.setGenre(genre);
             }
 
-            MovieList.add(Movie1);
-            MovieListView.getItems().add(Movie1);
+            MovieList.add(newMovie);
+            MovieListView.getItems().add(newMovie);
         });
 
             goBack2 = new Button("Go back to main menu");
             goBack2.setOnAction(e -> window.setScene(mainMenu));
 
             //List Movie Screen
-            Label listLabel = new Label("\tList Movies Screen");
+            Label listLabel = new Label("\tLIST MOVIES");
             goBack3 = new Button("Go back to main menu");
             goBack3.setOnAction(e -> window.setScene(mainMenu));
 
             //Sell Movie Screen
-            Label sellLabel = new Label("Sell Movie Screen");
+            Label sellLabel = new Label("\tSELL MOVIES");
             Label typeDirLabel2 = new Label("Please type the directory of the file containing the new movie.");
             TextField dir2 = new TextField();
 
@@ -219,10 +236,9 @@ public class Main extends Application {
             goBack4.setOnAction(e -> window.setScene(mainMenu));
 
             // Update Movie Screen
-            Label updateLabel = new Label("Update Movie Screen");
+            Label updateLabel = new Label("\tUPDATE A MOVIE");
             goBack5 = new Button("Go back to main menu");
             goBack5.setOnAction(e -> window.setScene(mainMenu));
-
 
             // Main Menu Display
             VBox mainMenuLayout = new VBox(20);
@@ -258,7 +274,15 @@ public class Main extends Application {
             window.show();
         }
 
-    private void getNameOrID(ChoiceBox<String> choiceBox, ArrayList<Movie> MovieList, ListView<Movie> MovieListView){
+    /**
+     * Lets user check out a movie by its name or ID.
+     * Removes a movie from the database once it has been located
+     * @param choiceBox A choice box that allows users to select Name or ID when checking out
+     * @param MovieList An array that holds all currently held movies.
+     * @param MovieListView A list view that holds all currently held movies.
+     * @return No return value.
+     */
+    private void checkOut(ChoiceBox<String> choiceBox, ArrayList<Movie> MovieList, ListView<Movie> MovieListView){
         if(choiceBox.getValue() == "ID"){
             System.out.println("User picked ID");
 
@@ -352,8 +376,6 @@ public class Main extends Application {
             goBackHome.setOnAction(e -> window.setScene(mainMenu));
         }
     }
-
-
 
     public void closeProgram(){
         window.close();
